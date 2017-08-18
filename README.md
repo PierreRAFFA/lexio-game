@@ -1,1 +1,1 @@
-# wordz-ranking
+# Wordz Game
