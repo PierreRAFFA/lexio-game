@@ -20,5 +20,9 @@
   "gameStatistics": {
     "dataSource": "db",
     "public": false
+  },
+  "ranking": {
+    "dataSource": "db",
+    "public": true
   }
 }

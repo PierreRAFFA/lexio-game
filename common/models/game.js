@@ -48,29 +48,30 @@ module.exports = function (Game) {
   });
 
   Game.read = function (filters, options, cb) {
+
+    const user = options.currentUser;
+    const accessToken = options.accessToken;
+    console.log(user);
+
     filters = assign({}, filters, {
       fields: { statistics: false },
       order: 'creationDate DESC',
-      limit: 15
     });
 
-    Game.find(filters).then(games => {
+    //force the limit to be 15 if no admin
+    if (!user.isAdmin) {
+      filters = assign({}, filters, {
+        limit: 15
+      });
+    }
 
+    Game.find(filters).then(games => {
       const userIds = uniq(map(games, game => {
         return game.userId;
       }));
 
-      const filters = { where: { id: { inq: userIds } } };
-
-      const accessToken = options.accessToken;
-      const url = `http://wordz-authentication:3010/api/users?access_token=${accessToken}&filters=${JSON.stringify(filters)}`;
-
-      request(url, (error, response, body) => {
-        if (error) {
-          res.status(response.status).send(error);
-        } else {
-          const users = JSON.parse(body);
-
+      getUserInformations(userIds, accessToken)
+        .then( users=> {
           games = map(games, game => {
             //set the server date
             game.serverDate = new Date().toISOString();
@@ -81,10 +82,13 @@ module.exports = function (Game) {
           });
 
           cb(null, games);
-        }
-      });
+        })
+        .catch(error => {
+          res.status(error.statusCode).send(error.message);
+        });
     });
   };
+
   //////////////////////////////////////////////////////////////////////////
   ///////////////////////////////////////////////////////////// HOOKS
   Game.observe('before save', function (ctx, next) {
@@ -120,3 +124,20 @@ module.exports = function (Game) {
     });
   });
 };
+
+function getUserInformations(userIds, accessToken) {
+  const defer = Promise.defer();
+  const filters = { where: { id: { inq: userIds } } };
+
+  const url = `http://wordz-authentication:3010/api/users?access_token=${accessToken}&filters=${JSON.stringify(filters)}`;
+
+  request(url, (error, response, body) => {
+    if (error) {
+      defer.reject({status: response.status, error: error})
+    } else {
+      defer.resolve(JSON.parse(body));
+    }
+  });
+
+  return defer.promise;
+}

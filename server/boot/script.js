@@ -3,6 +3,7 @@
 module.exports = function (app) {
 
   app.remotes().phases.addBefore('invoke', 'options-from-request').use(function (ctx, next) {
+    console.log('addBefore');
     ctx.args.options.accessToken = ctx.req.user.accessToken;
     ctx.args.options.currentUser = ctx.req.user;
     next();
