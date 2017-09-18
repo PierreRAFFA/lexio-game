@@ -45,7 +45,7 @@ module.exports = function(Ranking) {
   });
 
   Ranking.current = function (options) {
-    return Ranking.findOne({order: 'endDate'}).then(ranking => {
+    return Ranking.findOne({order: 'endDate DESC'}).then(ranking => {
       if (ranking) {
         let json = JSON.parse(JSON.stringify(ranking));
         json = assign({}, json, {

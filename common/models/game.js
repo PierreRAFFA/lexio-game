@@ -51,7 +51,6 @@ module.exports = function (Game) {
 
     const user = options.currentUser;
     const accessToken = options.accessToken;
-    console.log(user);
 
     filters = assign({}, filters, {
       fields: { statistics: false },
@@ -118,7 +117,6 @@ module.exports = function (Game) {
       if (error) {
         res.status(response.status).send(error);
       } else {
-        console.log(body);
         next();
       }
     });
