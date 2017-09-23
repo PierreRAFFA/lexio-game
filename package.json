@@ -1,5 +1,5 @@
 {
-  "name": "wordz-ranking",
+  "name": "LexioRanking",
   "version": "1.2.1",
   "main": "server/server.js",
   "engines": {
@@ -36,5 +36,5 @@
     "url": ""
   },
   "license": "UNLICENSED",
-  "description": "wordz-ranking"
+  "description": "Lexio Ranking"
 }

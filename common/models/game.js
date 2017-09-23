@@ -110,7 +110,7 @@ module.exports = function (Game) {
     const accessToken = ctx.options.accessToken;
 
     let options = {
-      url: `http://wordz-authentication:3010/api/users/me/consume-game?access_token=${accessToken}`,
+      url: `http://lexio-authentication:3010/api/users/me/consume-game?access_token=${accessToken}`,
       form: {game: JSON.stringify(game)},
     };
     request.post(options, (error, response, body) => {
@@ -127,7 +127,7 @@ function getUserInformations(userIds, accessToken) {
   const defer = Promise.defer();
   const filters = { where: { id: { inq: userIds } } };
 
-  const url = `http://wordz-authentication:3010/api/users?access_token=${accessToken}&filters=${JSON.stringify(filters)}`;
+  const url = `http://lexio-authentication:3010/api/users?access_token=${accessToken}&filters=${JSON.stringify(filters)}`;
 
   request(url, (error, response, body) => {
     if (error) {

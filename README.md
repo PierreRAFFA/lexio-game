@@ -1,1 +1,1 @@
-# Wordz Game
+# Lexio Game

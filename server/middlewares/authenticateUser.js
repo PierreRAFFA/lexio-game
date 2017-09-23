@@ -23,7 +23,6 @@ module.exports = () => {
         } else {
           //assign the user
           req.user = user;
-          console.log(user);
 
           next();
         }
