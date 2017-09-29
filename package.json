@@ -1,5 +1,5 @@
 {
-  "name": "LexioRanking",
+  "name": "LexioGame",
   "version": "1.3.0",
   "main": "server/server.js",
   "engines": {
@@ -20,6 +20,7 @@
     "loopback-boot": "^2.6.5",
     "loopback-component-explorer": "^4.0.0",
     "loopback-connector-mongodb": "^1.18.1",
+    "node-access-control": "^1.0.0",
     "request": "^2.81.0",
     "serve-favicon": "^2.0.1",
     "strong-error-handler": "^2.0.0"
@@ -36,5 +37,5 @@
     "url": ""
   },
   "license": "UNLICENSED",
-  "description": "Lexio Ranking"
+  "description": "Lexio Game"
 }

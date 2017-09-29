@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const get = require('lodash/get');
 const reduce = require('lodash/reduce');
 const assign = require('lodash/assign');
+const acl = require('node-access-control');
 
 /**
  * Populates the request by setting the user.
@@ -11,8 +12,15 @@ const assign = require('lodash/assign');
  * @returns {authenticateUser}
  */
 module.exports = () => {
-  return function authenticateUser(req, res, next) {
-    console.log('middleware:authenticateUser');
+
+  acl.denyAll();
+  acl.add(['admin'], 'any', '.*', 'allow');
+  acl.add(['authenticated'], 'GET', '/api/games.*', 'allow');
+  acl.add(['authenticated'], 'POST', '/api/games.*', 'allow');
+  acl.add(['authenticated'], 'GET', '/api/ranking.*', 'allow');
+
+  return function accessControl(req, res, next) {
+    console.log('middleware:accessControl');
 
     //get user information from JWT
     let token = getJWTToken(req);
@@ -21,10 +29,17 @@ module.exports = () => {
         if (err) {
           res.status(500).send(err);
         } else {
-          //assign the user
-          req.user = user;
-
-          next();
+          console.log(user);
+          const authorised = acl.can(user, req.method, req.baseUrl);
+          console.log('authorised: ' + authorised);
+          if (authorised) {
+            req.user = user;
+            next();
+          }else{
+            const error = new Error('Not Authorized');
+            error.statusCode = 401;
+            next(error);
+          }
         }
       });
     }else{

@@ -31,27 +31,10 @@
     }
   },
   "session": {},
-  "auth:before": {
-    "./middlewares/authenticateUser": {
-      "paths": [
-        "/api/*"
-      ],
-      "params": {}
-    }
-  },
   "auth": {
-    "./middlewares/isAuthenticated": {
+    "./middlewares/accessControl": {
       "paths": [
         "/api/*"
-      ],
-      "params": {}
-    },
-    "./middlewares/isAdmin": {
-      "paths": [
-        "/api/rankings"
-      ],
-      "methods": [
-        "POST"
       ],
       "params": {}
     }
