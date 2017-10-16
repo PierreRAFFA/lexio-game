@@ -49,7 +49,7 @@ module.exports = function (Game) {
 
   Game.read = function (filters, options, cb) {
 
-    const user = options.currentUser;
+    const currentUser = options.currentUser;
     const accessToken = options.accessToken;
 
     filters = assign({}, filters, {
@@ -58,7 +58,7 @@ module.exports = function (Game) {
     });
 
     //force the limit to be 15 if no admin
-    if (!user.isAdmin) {
+    if (!currentUser.isAdmin) {
       filters = assign({}, filters, {
         limit: 15
       });
@@ -70,12 +70,13 @@ module.exports = function (Game) {
       }));
 
       getUserInformations(userIds, accessToken)
-        .then( users=> {
+        .then( users => {
           games = map(games, game => {
             //set the server date
             game.serverDate = new Date().toISOString();
 
             //set the game user
+
             game.__data.user = head(filter(users, user => user.id.toString() === game.userId));
             return game;
           });
@@ -83,7 +84,7 @@ module.exports = function (Game) {
           cb(null, games);
         })
         .catch(error => {
-          res.status(error.statusCode).send(error.message);
+          cb(error);
         });
     });
   };

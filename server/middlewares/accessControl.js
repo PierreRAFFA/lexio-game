@@ -15,9 +15,9 @@ module.exports = () => {
 
   acl.denyAll();
   acl.add(['admin'], 'any', '.*', 'allow');
-  acl.add(['authenticated'], 'GET', '/api/games.*', 'allow');
-  acl.add(['authenticated'], 'POST', '/api/games.*', 'allow');
-  acl.add(['authenticated'], 'GET', '/api/ranking.*', 'allow');
+  acl.add(['authenticated'], 'GET', '/api/ranking.*', 'allow'); // player + guest
+  acl.add(['authenticated'], 'GET', '/api/games.*', 'allow'); // player + guest
+  acl.add(['player'], 'POST', '/api/games.*', 'allow');
 
   return function accessControl(req, res, next) {
     console.log('middleware:accessControl');
