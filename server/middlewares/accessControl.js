@@ -29,9 +29,7 @@ module.exports = () => {
         if (err) {
           res.status(500).send(err);
         } else {
-          console.log(user);
           const authorised = acl.can(user, req.method, req.baseUrl);
-          console.log('authorised: ' + authorised);
           if (authorised) {
             req.user = user;
             next();
