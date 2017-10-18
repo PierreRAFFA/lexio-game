@@ -57,12 +57,12 @@ module.exports = function (Game) {
       order: 'creationDate DESC',
     });
 
-    //force the limit to be 15 if no admin
-    if (!currentUser.isAdmin) {
+    //force the limit to be 15
+    // if (currentUser.roles.indexOf('admin') === -1) {
       filters = assign({}, filters, {
         limit: 15
       });
-    }
+    // }
 
     Game.find(filters).then(games => {
       const userIds = uniq(map(games, game => {

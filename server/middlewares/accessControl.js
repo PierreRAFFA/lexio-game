@@ -20,8 +20,6 @@ module.exports = () => {
   acl.add(['player'], 'POST', '/api/games.*', 'allow');
 
   return function accessControl(req, res, next) {
-    console.log('middleware:accessControl');
-
     //get user information from JWT
     let token = getJWTToken(req);
     if (token) {
