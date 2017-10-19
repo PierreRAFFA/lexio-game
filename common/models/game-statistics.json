@@ -11,11 +11,11 @@
       "required": true
     },
     "longestWord": {
-      "type": "string",
+      "type": ["object"],
       "required": true
     },
     "highestScoringWord": {
-      "type": "string",
+      "type": ["object"],
       "required": true
     },
     "highestScoringWordScore": {
