@@ -30,7 +30,7 @@ module.exports = function(Ranking) {
   //////////////////////////////////////////////////////////////////////////
   ///////////////////////////////////////////////////////////// REMOTE METHODS
   /**
-   * Returns the 15 latest games played
+   * Returns the ranking with the first RANKING_NUM_ITEMS users
    * Calls the AuthService to get the user information (send accessToken and not JWT)
    */
   Ranking.remoteMethod('current', {
@@ -45,7 +45,7 @@ module.exports = function(Ranking) {
   });
 
   Ranking.current = function (options) {
-    return Ranking.findOne({order: 'endDate DESC'}).then(ranking => {
+    return Ranking.findOne({where: {status: 'open'}}).then(ranking => {
       if (ranking) {
         let json = JSON.parse(JSON.stringify(ranking));
         json = assign({}, json, {
