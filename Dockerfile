@@ -1,4 +1,4 @@
-FROM node:boron
+FROM node:carbon
 
 # Create app directory
 RUN mkdir -p /var/app
@@ -6,7 +6,7 @@ WORKDIR /var/app
 
 # Install app dependencies
 COPY package.json /var/app
-RUN npm install --quiet --only=prod
+RUN npm install --quiet
 
 # Bundle app source
 COPY . /var/app
