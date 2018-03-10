@@ -125,18 +125,17 @@ module.exports = function (Game) {
 };
 
 function getUserInformations(userIds, accessToken) {
-  const defer = Promise.defer();
-  const filters = { where: { id: { inq: userIds } } };
+  return new Promise((resolve, reject) => {
+    const filters = { where: { id: { inq: userIds } } };
 
-  const url = `http://lexio-authentication:3010/api/users?access_token=${accessToken}&filters=${JSON.stringify(filters)}`;
+    const url = `http://lexio-authentication:3010/api/users?access_token=${accessToken}&filters=${JSON.stringify(filters)}`;
 
-  request(url, (error, response, body) => {
-    if (error) {
-      defer.reject({status: response.status, error: error})
-    } else {
-      defer.resolve(JSON.parse(body));
-    }
+    request(url, (error, response, body) => {
+      if (error) {
+        reject({status: response.status, error: error})
+      } else {
+        resolve(JSON.parse(body));
+      }
+    });
   });
-
-  return defer.promise;
 }
