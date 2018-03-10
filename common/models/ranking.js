@@ -57,4 +57,33 @@ module.exports = function(Ranking) {
       }
     });
   }
+
+  /**
+   * Returns the overall ranking with the first RANKING_NUM_ITEMS users
+   * Calls the AuthService to get the user information (send accessToken and not JWT)
+   */
+  Ranking.remoteMethod('overall', {
+    http: {
+      path: '/overall',
+      verb: 'get'
+    },
+    accepts: [
+      {"arg": "options", "type": "object", "http": "optionsFromRequest"}
+    ],
+    returns: { arg:'ranking', type: Ranking, root: true }
+  });
+
+  Ranking.overall = function (options) {
+    return Ranking.findOne({where: {status: 'overall'}}).then(ranking => {
+      if (ranking) {
+        let json = JSON.parse(JSON.stringify(ranking));
+        json = assign({}, json, {
+          ranking: take(json.ranking, RANKING_NUM_ITEMS)
+        });
+        return json;
+      }else{
+        return [];
+      }
+    });
+  }
 };
