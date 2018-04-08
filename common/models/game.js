@@ -53,7 +53,6 @@ module.exports = function (Game) {
     const accessToken = options.accessToken;
 
     filters = assign({}, filters, {
-      fields: { statistics: false },
       order: 'creationDate DESC',
     });
 
