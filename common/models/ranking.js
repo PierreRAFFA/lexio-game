@@ -56,7 +56,7 @@ module.exports = function(Ranking) {
         return [];
       }
     });
-  }
+  };
 
   /**
    * Returns the overall ranking with the first RANKING_NUM_ITEMS users
@@ -75,6 +75,68 @@ module.exports = function(Ranking) {
 
   Ranking.overall = function (options) {
     return Ranking.findOne({where: {status: 'overall'}}).then(ranking => {
+      if (ranking) {
+        let json = JSON.parse(JSON.stringify(ranking));
+        json = assign({}, json, {
+          ranking: take(json.ranking, RANKING_NUM_ITEMS)
+        });
+        return json;
+      }else{
+        return [];
+      }
+    });
+  };
+
+  /**
+   * Returns the ranking for a specific language with the first RANKING_NUM_ITEMS users
+   * Calls the AuthService to get the user information (send accessToken and not JWT)
+   */
+  Ranking.remoteMethod('getLanguageCurrent', {
+    http: {
+      path: '/:language/current',
+      verb: 'get'
+    },
+    accepts: [
+      {"arg": "options", "type": "object", "http": "optionsFromRequest"},
+      {"arg": 'language', "type": 'string'},
+    ],
+    returns: { arg:'ranking', type: Ranking, root: true }
+  });
+
+  Ranking.getLanguageCurrent = function (options, language) {
+    console.log(language);
+    return Ranking.findOne({where: {status: 'open', language: language}}).then(ranking => {
+      if (ranking) {
+        let json = JSON.parse(JSON.stringify(ranking));
+        json = assign({}, json, {
+          ranking: take(json.ranking, RANKING_NUM_ITEMS)
+        });
+        return json;
+      }else{
+        return [];
+      }
+    });
+  };
+
+
+  /**
+   * Returns the overall ranking with the first RANKING_NUM_ITEMS users
+   * Calls the AuthService to get the user information (send accessToken and not JWT)
+   */
+  Ranking.remoteMethod('getLanguageOverall', {
+    http: {
+      path: '/:language/overall',
+      verb: 'get'
+    },
+    accepts: [
+      {"arg": "options", "type": "object", "http": "optionsFromRequest"},
+      {"arg": 'language', "type": 'string'},
+    ],
+    returns: { arg:'ranking', type: Ranking, root: true }
+  });
+
+  Ranking.getLanguageOverall = function (options, language) {
+    return Ranking.findOne({where: {status: 'overall', language: language}}).then(ranking => {
       if (ranking) {
         let json = JSON.parse(JSON.stringify(ranking));
         json = assign({}, json, {
