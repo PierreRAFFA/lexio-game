@@ -1,16 +1,13 @@
 FROM node:carbon
 
 # Create app directory
-RUN mkdir -p /var/app
-WORKDIR /var/app
+RUN mkdir -p /var/www/ms-service/
+WORKDIR /var/www/ms-service/
 
 # Install app dependencies
-COPY package.json /var/app
-RUN npm install --quiet
+#COPY package.json /var/www/ms-service/
 
 # Bundle app source
-COPY . /var/app
+COPY . /var/www/ms-service/
 
-EXPOSE 3010
-
-CMD [ "npm", "run", "start" ]
+CMD ["npm", "start"]
