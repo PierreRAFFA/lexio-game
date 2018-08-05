@@ -1,13 +1,14 @@
-FROM node:carbon
+FROM node:8-alpine
 
 # Create app directory
-RUN mkdir -p /var/www/ms-service/
-WORKDIR /var/www/ms-service/
+WORKDIR /var/app
 
 # Install app dependencies
-#COPY package.json /var/www/ms-service/
+COPY . /var/app
 
-# Bundle app source
-COPY . /var/www/ms-service/
+RUN npm install --quiet && \
+    npm run build
 
-CMD ["npm", "start"]
+EXPOSE 3000
+
+CMD [ "npm", "run", "start" ]

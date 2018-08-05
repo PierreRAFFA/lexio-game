@@ -1,6 +1,8 @@
-import { NextFunction, Request, Response, Router } from "express";
+import { Request, Response, Router } from "express";
 
-import * as exampleController from './controllers/example';
+import * as gameController from './controllers/gameController';
+import * as rankingController from './controllers/rankingController';
+import { accessControl } from "./middlewares/accessControl";
 
 const routes: Router = require('express').Router();
 
@@ -16,10 +18,14 @@ routes.get('/healthcheck', (req: Request, res: Response) => {
 ////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////// EXAMPLE
 
-routes.get("/examples/:id", exampleController.get);
-routes.post("/example", exampleController.post);
-routes.put("/examples/:id", exampleController.put);
-routes.delete("/examples/:id", exampleController.del);
-routes.patch("/examples/:id", exampleController.patch);
+// routes.get("/games/:id", gameController.getById);
+routes.get("/api/games", accessControl, gameController.read);
+routes.post("/api/games", accessControl, gameController.create);
+
+routes.get("/api/rankings/:language/overall", accessControl, rankingController.readOverall);
+routes.get("/api/rankings/:language/current", accessControl, rankingController.readCurrent);
+// routes.put("/games/:id", gameController.put);
+// routes.delete("/games/:id", gameController.del);
+// routes.patch("/games/:id", gameController.patch);
 
 export default routes;

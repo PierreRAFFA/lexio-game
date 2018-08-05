@@ -41,7 +41,7 @@ if (process.env.LOG_LEVEL <= 2) {
     }
   }));
 } else {
-  app.use(morgan(logFormat,{ stream: {
+  app.use(morgan(logFormat, { stream: {
       write: logger.info
     }
   }));
