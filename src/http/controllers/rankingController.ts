@@ -36,6 +36,9 @@ export const readOverall = async (req: LexioRequest, res: Response) => {
     ranking: take(ranking.ranking, RANKING_NUM_ITEMS)
   });
 
+  const authenticatedUser: IFullUser = getAuthenticatedUser(req);
+  ranking.userPosition = getUserPositionFromRanking(ranking, authenticatedUser);
+
   //send response
   res.status(200).json(ranking);
 };
