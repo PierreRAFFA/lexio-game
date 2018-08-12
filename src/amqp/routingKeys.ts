@@ -7,6 +7,7 @@
  */
 
 
+import rankingTimeEnd from './controllers/rankingTimeEnd';
 /** insert:imports */
 
 export interface IRoutingKey {
@@ -17,5 +18,6 @@ export interface IRoutingKey {
  * Topic List for RabbitMQ Queue
  */
 export let routingKeys: IRoutingKey = {
+  'event.rankingTimeEnd': rankingTimeEnd.process,
   /** insert:routingKeys */
 };
