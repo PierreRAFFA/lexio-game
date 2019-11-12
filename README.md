@@ -1,1 +1,1 @@
-#u Lexio Game
+#gu Lexio Game
