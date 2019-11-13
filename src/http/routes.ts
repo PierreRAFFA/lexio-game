@@ -19,12 +19,13 @@ routes.get('/healthcheck', (req: Request, res: Response) => {
 ////////////////////////////////////////////////// EXAMPLE
 
 // routes.get("/games/:id", gameController.getById);
-routes.get("/api/games", accessControl, gameController.read);
-routes.post("/api/games", accessControl, gameController.create);
+routes.get("/games", accessControl, gameController.read);
+routes.post("/games", accessControl, gameController.create);
+routes.put("/games/:id", accessControl, gameController.update);
 
-routes.get("/api/rankings/:language/overall", accessControl, rankingController.readOverall);
-routes.get("/api/rankings/:language/current", accessControl, rankingController.readCurrent);
-routes.get("/api/rankings/:language/:reference", accessControl, rankingController.readFromReference);
+routes.get("/rankings/:language/overall", accessControl, rankingController.readOverall);
+routes.get("/rankings/:language/current", accessControl, rankingController.readCurrent);
+routes.get("/rankings/:language/:reference", accessControl, rankingController.readFromReference);
 // routes.put("/games/:id", gameController.put);
 // routes.delete("/games/:id", gameController.del);
 // routes.patch("/games/:id", gameController.patch);

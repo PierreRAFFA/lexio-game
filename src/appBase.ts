@@ -26,7 +26,7 @@ class AppBase {
     logger.info(chalk.bgGreen('App version', pkg.version));
     logger.info(chalk.bgGreen('NODE_ENV:', process.env.NODE_ENV));
 
-    await this.startAmqp();
+    // await this.startAmqp();
     await this.startHttp();
   }
 

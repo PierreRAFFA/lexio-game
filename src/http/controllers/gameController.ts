@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
-import { Db, InsertOneWriteOpResult } from "mongodb";
+import { Db, InsertOneWriteOpResult, UpdateWriteOpResult, ObjectID } from "mongodb";
 import { getDatabase } from "../../external/db";
-import { assign, uniq, map, filter, head } from 'lodash';
-import { IGame, IUser, lexio, LexioRequest, getAuthenticatedUser } from 'lexio';
+import { filter, head, map, uniq } from 'lodash';
+import { GameStatus, getAuthenticatedUser, IGamePlayed, IGamePlaying, IUser, lexio, LexioRequest } from 'lexio';
 
-const GAME_LIMIT: number = 15;;
+const GAME_LIMIT: number = 15;
 
 /**
  *
@@ -46,20 +46,59 @@ export const read = async (req: LexioRequest , res: Response) => {
  * @param {e.Response} res
  */
 export let create = async (req: LexioRequest, res: Response) => {
-  const { body: { score, language, statistics }} = req;
+  const { body: { score, language, coins, powerups }} = req;
 
-  const game: IGame = {
-    score: parseInt(score),
+  console.log('create');
+  const game: IGamePlaying = {
     language: language.toString(),
-    statistics: statistics,
+    coins,
+    powerups,
     userId: getAuthenticatedUser(req).id,
+    creationDate: new Date(),
+    status: GameStatus.PLAYING,
   };
 
   const db: Db = await getDatabase();
   const instance: InsertOneWriteOpResult = await db.collection('game').insertOne(game);
 
+  const user: IUser = await lexio.fromReq(req).consumeCoin(game);
+  console.log(user);
   res.status(201).json({
     id: instance.insertedId
+  });
+};
+
+/**
+ *
+ * @param {e.Request} req
+ * @param {e.Response} res
+ */
+export let update = async (req: LexioRequest, res: Response) => {
+  const { body: { score, language, statistics }} = req;
+
+  const gameId: string = req.params.id;
+
+  console.log('update');
+  const gamePlayed: IGamePlayed = {
+    score: parseInt(score),
+    statistics: statistics,
+    userId: getAuthenticatedUser(req).id,
+    status: GameStatus.PLAYED,
+    played: new Date(),
+  };
+
+  console.log('gameId', gameId);
+
+  const db: Db = await getDatabase();
+  const result: UpdateWriteOpResult = await db.collection('game').updateOne({_id: new ObjectID(gameId)}, {$set: gamePlayed});
+  const game: UpdateWriteOpResult = await db.collection('game').findOne({_id: new ObjectID(gameId)});
+
+  console.log(result);
+
+  const user: IUser = await lexio.fromReq(req).registerGameStatistics(game);
+  console.log(user);
+  res.status(201).json({
+    id: gameId
   });
 };
 
